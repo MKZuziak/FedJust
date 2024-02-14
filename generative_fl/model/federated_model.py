@@ -77,7 +77,7 @@ class FederatedModel:
         self.optimizer = optimizer_template(params_to_update)
         
 
-    def attach_huggingface_dataset(
+    def attach_dataset_id(
         self,
         local_dataset: list[datasets.arrow_dataset.Dataset, datasets.arrow_dataset.Dataset] | list[datasets.arrow_dataset.Dataset],
         node_name: int | str,

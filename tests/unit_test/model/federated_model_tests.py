@@ -43,12 +43,12 @@ class ModelTests(unittest.TestCase):
         )
         # Dataset Loading
         train, test = return_mnist()
-        model_prop_node.attach_huggingface_dataset(
+        model_prop_node.attach_dataset_id(
             local_dataset = [train, test],
             node_name = 42,
             batch_size=batch_size
         )
-        model_prop_orchestrator.attach_huggingface_dataset(
+        model_prop_orchestrator.attach_dataset_id(
             local_dataset = [test],
             node_name = 'orchestrator',
             only_test = True,
@@ -106,7 +106,7 @@ class ModelTests(unittest.TestCase):
         )
         # Dataset Loading
         train, test = return_mnist()
-        model_prop_node.attach_huggingface_dataset(
+        model_prop_node.attach_dataset_id(
             local_dataset = [train, test],
             node_name = 42,
             batch_size=32
@@ -139,12 +139,12 @@ class ModelTests(unittest.TestCase):
         )
         # Dataset Loading
         train, test = return_mnist()
-        model_prop_node.attach_huggingface_dataset(
+        model_prop_node.attach_dataset_id(
             local_dataset = [train, test],
             node_name = 42,
             batch_size=batch_size
         )
-        model_prop_orchestrator.attach_huggingface_dataset(
+        model_prop_orchestrator.attach_dataset_id(
             local_dataset = [test],
             node_name = 'orchestrator',
             only_test = True,
