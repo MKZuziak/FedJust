@@ -181,7 +181,7 @@ class FederatedModel:
             _type_: weights of the network
         """
         self.net.to(self.cpu) # Dupming weights on cpu.
-        return self.net.state_dict()
+        return copy.deepcopy(self.net.state_dict())
     
     
     # def get_gradients(self) -> None:
@@ -230,7 +230,7 @@ class FederatedModel:
         -------
         None
         """
-        self.net.load_state_dict(avg_tensors, strict=True)
+        self.net.load_state_dict(copy.deepcopy(avg_tensors), strict=True)
 
 
     def store_model_on_disk(
@@ -277,59 +277,60 @@ class FederatedModel:
     #     self.initial_model = copy.deepcopy(self.net)
 
 
-    # def train(
-    #     self,
-    #     iteration: int,
-    #     epoch: int
-    #     ) -> tuple[float, torch.tensor]:
-    #     """Train the network and computes loss and accuracy.
+    def train(
+        self,
+        iteration: int,
+        epoch: int
+        ) -> tuple[float, torch.tensor]:
+        """Train the network and computes loss and accuracy.
         
-    #     Parameters
-    #     ----------
-    #     iterations: int 
-    #         Current iteration
-    #     epoch: int
-    #         Current (local) epoch
+        Parameters
+        ----------
+        iterations: int 
+            Current iteration
+        epoch: int
+            Current (local) epoch
         
-    #     Returns
-    #     -------
-    #     None
-    #     """
-    #     criterion = nn.CrossEntropyLoss()
-    #     train_loss = 0
-    #     correct = 0
-    #     total = 0
-    #     # Try: to place a net on the device during the training stage
-    #     self.net.to(self.device)
-    #     self.net.train()
-    #     for _, dic in enumerate(self.trainloader):
-    #         inputs = dic['image']
-    #         targets = dic['label']
-    #         inputs, targets = inputs.to(self.device), targets.to(self.device)
-    #         self.net.zero_grad() # Zero grading the network                        
-    #         # forward pass, backward pass and optimization
-    #         outputs = self.net(inputs)
-    #         loss = criterion(outputs, targets)
-    #         loss.backward()
-    #         self.optimizer.step()
+        Returns
+        -------
+        None
+        """
+        criterion = torch.nn.CrossEntropyLoss()
+        train_loss = 0
+        correct = 0
+        total = 0
+        # Try: to place a net on the device during the training stage
+        self.net.to(self.device)
+        self.net.train()
+        for _, dic in enumerate(self.trainloader):
+            inputs = dic['image']
+            targets = dic['label']
+            inputs, targets = inputs.to(self.device), targets.to(self.device)
+            self.net.zero_grad() # Zero grading the network                        
+            # forward pass, backward pass and optimization
+            outputs = self.net(inputs)
+            loss = criterion(outputs, targets)
+            loss.backward()
+            self.optimizer.step()
             
-    #         train_loss += loss.item()
-    #         _, predicted = outputs.max(1)
-    #         total += targets.size(0)
-    #         correct += predicted.eq(targets).sum().item()
+            train_loss += loss.item()
+            _, predicted = outputs.max(1)
+            total += targets.size(0)
+            correct += predicted.eq(targets).sum().item()
                     
-    #         # Emptying the cuda_cache
-    #         # if torch.cuda.is_available():
-    #         #     torch.cuda.empty_cache()
+            # Emptying the cuda_cache
+            # if torch.cuda.is_available():
+            #     torch.cuda.empty_cache()
 
-    #     loss = train_loss / len(self.trainloader)
-    #     accuracy = correct / total
-    #     model_logger.info(f"[ITERATION {iteration} | EPOCH {epoch} | NODE {self.node_name}] Training on {self.node_name} results: loss: {loss}, accuracy: {accuracy}")
+        loss = train_loss / len(self.trainloader)
+        accuracy = correct / total
+        # model_logger.info(f"[ITERATION {iteration} | EPOCH {epoch} | NODE {self.node_name}] Training on {self.node_name} results: loss: {loss}, accuracy: {accuracy}")
+        print(f"[ITERATION {iteration} | EPOCH {epoch} | NODE {self.node_name}] Training on {self.node_name} results: loss: {loss}, accuracy: {accuracy}")
         
-    #     return (loss, 
-    #             accuracy)
+        return (loss, 
+                accuracy)
     
-
+    
     # def evaluate_model(self) -> tuple[float, float, float, float, float, list]:
     #     """Validate the network on the local test set.
         
