@@ -345,7 +345,7 @@ class FederatedModel:
         # Try: to place net on device directly during the evaluation stage.
         self.net.to(self.device)
         self.net.eval()
-        criterion = nn.CrossEntropyLoss()
+        criterion = torch.nn.CrossEntropyLoss()
         test_loss = 0
         correct = 0
         total = 0

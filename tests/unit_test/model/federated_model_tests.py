@@ -4,7 +4,7 @@ from collections import OrderedDict
 import os
 
 import torch
-import numpy
+import numpy as np
 
 from tests.test_props.nets import NeuralNetwork
 from tests.test_props.datasets import return_mnist
@@ -167,6 +167,22 @@ class ModelTests(unittest.TestCase):
             for (layer_node, layer_orchestrator) in zip(weights_node.values(), weights_orchestrator.values()):
                 self.assertTrue(torch.allclose(layer_node, layer_orchestrator))
             
-            
+        # Tests -> evaluation
+        (test_loss,
+        accuracy,
+        f1score,
+        precision,
+        recall,
+        accuracy_per_class,
+        true_positive_rate,
+        false_positive_rate) = model_prop_node.evaluate_model()
+        
+        self.assertIsNotNone(test_loss)
+        self.assertIsNotNone(accuracy)
+        self.assertIsNotNone(f1score)
+        self.assertIsNotNone(precision)
+        self.assertIsNotNone(recall)
+        
+                    
 if __name__ == "__main__":
     unittest.main()
