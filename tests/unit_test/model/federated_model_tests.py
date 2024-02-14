@@ -1,6 +1,7 @@
 import unittest
 from functools import partial
 from collections import OrderedDict
+import os
 
 import torch
 import numpy
@@ -90,7 +91,33 @@ class ModelTests(unittest.TestCase):
         # Test -> weights should not be the same
         for (layer_node, layer_orchestrator) in zip(weights_node.values(), weights_orchestrator.values()):
             self.assertFalse(torch.allclose(layer_node, layer_orchestrator))
-
+    
+    
+    def test_saving_model(self):
+        # Initialization
+        model = NeuralNetwork()
+        optimizer_template = partial(torch.optim.SGD, lr=0.001)
+        model_prop_node = FederatedModel(
+            net=model,
+            optimizer_template=optimizer_template,
+            force_cpu=False
+        )
+        # Dataset Loading
+        train, test = return_mnist()
+        model_prop_node.attach_huggingface_dataset(
+            local_dataset = [train, test],
+            node_name = 42,
+            batch_size=32
+        )
+        
+        # Saving
+        path = os.getcwd()
+        model_prop_node.store_model_on_disk(iteration=5,
+                                            path=path)
+        # Tests
+        self.assertTrue(os.path.exists(os.path.join(path, "node_42_iteration_5.pt")))
+        # Removing saved model
+        os.remove(os.path.join(path, "node_42_iteration_5.pt"))
 
 if __name__ == "__main__":
     unittest.main()

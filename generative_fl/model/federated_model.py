@@ -1,6 +1,7 @@
 import torch
 from functools import partial
 import copy
+import os
 
 
 import torch
@@ -232,33 +233,33 @@ class FederatedModel:
         self.net.load_state_dict(avg_tensors, strict=True)
 
 
-    # def store_model_on_disk(
-    #     self,
-    #     iteration: int,
-    #     path: str
-    #     ) -> None:
-    #     """Saves local model in a .pt format.
-    #     Parameters
-    #     ----------
-    #     Iteration: int
-    #         Current iteration
-    #     Path: str
-    #         Path to the saved repository
+    def store_model_on_disk(
+        self,
+        iteration: int,
+        path: str
+        ) -> None:
+        """Saves local model in a .pt format.
+        Parameters
+        ----------
+        Iteration: int
+            Current iteration
+        Path: str
+            Path to the saved repository
         
-    #     Returns: 
-    #     -------
-    #     None
+        Returns: 
+        -------
+        None
         
-    #     Raises
-    #     -------
-    #         Exception if the model is not initialized it raises an exception
-    #     """
-    #     name = f"node_{self.node_name}_iteration_{iteration}.pt"
-    #     save_path = os.path.join(path, name)
-    #     torch.save(
-    #         self.net.state_dict(),
-    #         save_path,
-    #     )
+        Raises
+        -------
+            Exception if the model is not initialized it raises an exception
+        """
+        name = f"node_{self.node_name}_iteration_{iteration}.pt"
+        save_path = os.path.join(path, name)
+        torch.save(
+            self.net.state_dict(),
+            save_path,
+        )
 
 
     # def preserve_initial_model(self) -> None:
