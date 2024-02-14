@@ -165,22 +165,22 @@ class FederatedModel:
     #     return [val.cpu().numpy() for _, val in self.net.state_dict().items()]
 
 
-    # def get_weights(self) -> None:
-    #     """Get the weights of the network.
+    def get_weights(self) -> None:
+        """Get the weights of the network.
         
-    #     Parameters
-    #     ----------
+        Parameters
+        ----------
         
-    #     Raises
-    #     -------------
-    #         Exception: if the model is not initialized it raises an exception.
+        Raises
+        -------------
+            Exception: if the model is not initialized it raises an exception.
         
-    #     Returns
-    #     -------------
-    #         _type_: weights of the network
-    #     """
-    #     self.net.to(self.cpu) # Dupming weights on cpu.
-    #     return self.net.state_dict()
+        Returns
+        -------------
+            _type_: weights of the network
+        """
+        self.net.to(self.cpu) # Dupming weights on cpu.
+        return self.net.state_dict()
     
     
     # def get_gradients(self) -> None:
@@ -210,26 +210,26 @@ class FederatedModel:
     #     return self.gradients # Try: to provide original weights, no copies
 
 
-    # def update_weights(
-    #     self, 
-    #     avg_tensors
-    #     ) -> None:
-    #     """Updates the weights of the network stored on client with passed tensors.
+    def update_weights(
+        self, 
+        avg_tensors
+        ) -> None:
+        """Updates the weights of the network stored on client with passed tensors.
         
-    #     Parameters
-    #     ----------
-    #     avg_tensors: Ordered_Dict
-    #         An Ordered Dictionary containing a averaged tensors
+        Parameters
+        ----------
+        avg_tensors: Ordered_Dict
+            An Ordered Dictionary containing a averaged tensors
         
-    #     Raises
-    #     ------
-    #     Exception: _description_
+        Raises
+        ------
+        Exception: _description_
        
-    #     Returns
-    #     -------
-    #     None
-    #     """
-    #     self.net.load_state_dict(avg_tensors, strict=True)
+        Returns
+        -------
+        None
+        """
+        self.net.load_state_dict(avg_tensors, strict=True)
 
 
     # def store_model_on_disk(
