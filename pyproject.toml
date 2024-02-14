@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "generative-fl"
+version = "0.1.0"
+description = ""
+authors = ["Scolpe <63779111+Scolpe@users.noreply.github.com>"]
+readme = "README.md"
+packages = [{include = "generative_fl"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
