@@ -1,7 +1,13 @@
-# Libraries imports
-import torch, copy
-# import numpy as np
+import torch
 from functools import partial
+import copy
+
+
+import torch
+import numpy
+import datasets
+from torchvision import transforms
+
 # from datasets import arrow_dataset
 # from collections import OrderedDict
 # # Modules imports
@@ -29,7 +35,6 @@ class FederatedModel:
         self,
         net: torch.nn.Module,
         optimizer_template: partial,
-        node_name: int | str,
         force_cpu: bool = False) -> None:
         """Initialize the Federated Model. This model will be attached to a 
         specific client and will wait for further instructionss
@@ -61,7 +66,7 @@ class FederatedModel:
         self.initial_model = None
         self.optimizer = None  
         self.net = copy.deepcopy(net)
-        self.node_name = node_name
+        self.node_name = None
         # List containing all the parameters to update
         params_to_update = []
         for _, param in self.net.named_parameters():
@@ -70,54 +75,54 @@ class FederatedModel:
         self.optimizer = optimizer_template(params_to_update)
         
 
-    # def prepare_data(
-    #     self,
-    #     local_dataset: list[arrow_dataset.Dataset, arrow_dataset.Dataset] | list[arrow_dataset.Dataset],
-    #     only_test: bool = False
-    #     ) -> tuple[torch.utils.data.DataLoader, torch.utils.data.DataLoader]:
-    #     """Convert training and test data stored on the local client into
-    #     torch.utils.data.DataLoader.
+    def attach_huggingface_dataset(
+        self,
+        local_dataset: list[datasets.arrow_dataset.Dataset, datasets.arrow_dataset.Dataset] | list[datasets.arrow_dataset.Dataset],
+        node_name: int | str,
+        only_test: bool = False,
+        batch_size: int = 32
+        ) -> None:
+        """Attaches huggingface dataset to the model by firstly converting it into a pytorch-appropiate standard.
         
-    #     Parameters
-    #     ----------
-    #     local_dataset: list[...] 
-    #         A local dataset that should be loaded into DataLoader
-    #     only_test: bool [default to False]: 
-    #         If true, only a test set will be returned
+        Parameters
+        ----------
+        local_dataset: list[datasets.arrow_dataset.Dataset] 
+            A local dataset that should be loaded into DataLoader
+        node_name: int | str
+            The name of the node attributed to particular dataset
+        only_test: bool [default to False]: 
+            If true, only a test set will be returned
+        batch_size: int [default to 32]:
+            Batch size used in test and train loader
         
-    #     Returns
-    #     -------------
-    #     Tuple[torch.utils.data.DataLoader, torch.utils.data.DataLoader]: training and test set or
-    #     Tuple[torch.utils.data.DataLoader]: test set, if only_test == True.
-    #     """
-    #     if only_test == False:
-    #         local_dataset[0] = local_dataset[0].with_transform(self.transform_func)
-    #         local_dataset[1] = local_dataset[1].with_transform(self.transform_func)
-    #         batch_size = self.settings.batch_size
-    #         trainloader = torch.utils.data.DataLoader(
-    #             local_dataset[0],
-    #             batch_size=batch_size,
-    #             shuffle=True,
-    #             num_workers=0,
-    #         )
-
-    #         testloader = torch.utils.data.DataLoader(
-    #             local_dataset[1],
-    #             batch_size=16,
-    #             shuffle=False,
-    #             num_workers=0,
-    #         )
-    #         #self.print_data_stats(trainloader) #TODO
-    #         return trainloader, testloader
-    #     else:
-    #         local_dataset[0] = local_dataset[0].with_transform(self.transform_func)
-    #         testloader = torch.utils.data.DataLoader(
-    #             local_dataset[0],
-    #             batch_size=16,
-    #             shuffle=False,
-    #             num_workers=0,
-    #         )
-    #         return testloader
+        Returns
+        -------------
+        None
+        """
+        self.node_name = node_name
+        if only_test == False:
+            local_dataset[0] = local_dataset[0].with_transform(self.transform_func)
+            local_dataset[1] = local_dataset[1].with_transform(self.transform_func)
+            self.trainloader = torch.utils.data.DataLoader(
+                local_dataset[0],
+                batch_size=batch_size,
+                shuffle=True,
+                num_workers=0,
+            )
+            self.testloader = torch.utils.data.DataLoader(
+                local_dataset[1],
+                batch_size=batch_size,
+                shuffle=False,
+                num_workers=0,
+            )
+        else:
+            local_dataset[0] = local_dataset[0].with_transform(self.transform_func)
+            self.testloader = torch.utils.data.DataLoader(
+                local_dataset[0],
+                batch_size=batch_size,
+                shuffle=False,
+                num_workers=0,
+            )
 
 
     # def print_model_footprint(self) -> None:
@@ -457,10 +462,21 @@ class FederatedModel:
     #         )
 
 
-    # def transform_func(
-    #     self,
-    #     data
-    #     ):
-    #     convert_tensor = transforms.ToTensor()
-    #     data['image'] = [convert_tensor(img) for img in data['image']]
-    #     return data
+    def transform_func(
+        self,
+        data: datasets.arrow_dataset.Dataset
+        ) -> None:
+        """ Convers datasets.arrow_dataset.Dataset into a PyTorch Tensor
+        Parameters
+        ----------
+        local_dataset: datasets.arrow_dataset.Dataset
+            A local dataset that should be loaded into DataLoader
+        only_test: bool [default to False]: 
+            If true, only a test set will be returned
+        
+        Returns
+        -------------
+        None"""
+        convert_tensor = transforms.ToTensor()
+        data['image'] = [convert_tensor(img) for img in data['image']]
+        return data
