@@ -37,6 +37,7 @@ class FederatedModel:
         self,
         net: torch.nn.Module,
         optimizer_template: partial,
+        loader_batch_size: int,
         force_cpu: bool = False) -> None:
         """Initialize the Federated Model. This model will be attached to a 
         specific client and will wait for further instructionss
@@ -49,6 +50,8 @@ class FederatedModel:
             The partial function of the optimizer that will be used as a template
         node_name: int | str
             The name of the node
+        loader_batch_size: int
+            Batch size of the trainloader and testloader.
         force_gpu: bool = False
             Option to force the calculations on cpu even if the gpu is available.
         
@@ -69,6 +72,7 @@ class FederatedModel:
         self.optimizer = None  
         self.net = copy.deepcopy(net)
         self.node_name = None
+        self.batch_size = loader_batch_size
         # List containing all the parameters to update
         params_to_update = []
         for _, param in self.net.named_parameters():
@@ -81,8 +85,7 @@ class FederatedModel:
         self,
         local_dataset: list[datasets.arrow_dataset.Dataset, datasets.arrow_dataset.Dataset] | list[datasets.arrow_dataset.Dataset],
         node_name: int | str,
-        only_test: bool = False,
-        batch_size: int = 32
+        only_test: bool = False
         ) -> None:
         """Attaches huggingface dataset to the model by firstly converting it into a pytorch-appropiate standard.
         
@@ -107,13 +110,13 @@ class FederatedModel:
             local_dataset[1] = local_dataset[1].with_transform(self.transform_func)
             self.trainloader = torch.utils.data.DataLoader(
                 local_dataset[0],
-                batch_size=batch_size,
+                batch_size=self.batch_size,
                 shuffle=True,
                 num_workers=0,
             )
             self.testloader = torch.utils.data.DataLoader(
                 local_dataset[1],
-                batch_size=batch_size,
+                batch_size=self.batch_size,
                 shuffle=False,
                 num_workers=0,
             )
@@ -121,7 +124,7 @@ class FederatedModel:
             local_dataset[0] = local_dataset[0].with_transform(self.transform_func)
             self.testloader = torch.utils.data.DataLoader(
                 local_dataset[0],
-                batch_size=batch_size,
+                batch_size=self.batch_size,
                 shuffle=False,
                 num_workers=0,
             )

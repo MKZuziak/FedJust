@@ -19,6 +19,7 @@ class ModelTests(unittest.TestCase):
         model_prop = FederatedModel(
             net=model,
             optimizer_template=optimizer_template,
+            loader_batch_size=32,
             force_cpu=True)
         
         # Tests
@@ -34,25 +35,25 @@ class ModelTests(unittest.TestCase):
         model_prop_node = FederatedModel(
             net=model,
             optimizer_template=optimizer_template,
+            loader_batch_size=32,
             force_cpu=False
         )
         model_prop_orchestrator = FederatedModel(
             net=model,
             optimizer_template=optimizer_template,
+            loader_batch_size=32,
             force_cpu=False
         )
         # Dataset Loading
         train, test = return_mnist()
         model_prop_node.attach_dataset_id(
             local_dataset = [train, test],
-            node_name = 42,
-            batch_size=batch_size
+            node_name = 42
         )
         model_prop_orchestrator.attach_dataset_id(
             local_dataset = [test],
             node_name = 'orchestrator',
-            only_test = True,
-            batch_size=batch_size
+            only_test = True
         )
         # Tests
         self.assertIsNotNone(model_prop_node.trainloader)
@@ -69,11 +70,13 @@ class ModelTests(unittest.TestCase):
         model_prop_node = FederatedModel(
             net=model,
             optimizer_template=optimizer_template,
+            loader_batch_size=32,
             force_cpu=False
         )
         model_prop_orchestrator = FederatedModel(
             net=model,
             optimizer_template=optimizer_template,
+            loader_batch_size=32,
             force_cpu=False
         )
         # Weights retireve
@@ -102,14 +105,14 @@ class ModelTests(unittest.TestCase):
         model_prop_node = FederatedModel(
             net=model,
             optimizer_template=optimizer_template,
+            loader_batch_size=32,
             force_cpu=False
         )
         # Dataset Loading
         train, test = return_mnist()
         model_prop_node.attach_dataset_id(
             local_dataset = [train, test],
-            node_name = 42,
-            batch_size=32
+            node_name = 42
         )
         
         # Saving
@@ -130,11 +133,13 @@ class ModelTests(unittest.TestCase):
         model_prop_node = FederatedModel(
             net=model,
             optimizer_template=optimizer_template,
+            loader_batch_size=32,
             force_cpu=False
         )
         model_prop_orchestrator = FederatedModel(
             net=model,
             optimizer_template=optimizer_template,
+            loader_batch_size=32,
             force_cpu=False
         )
         # Dataset Loading
@@ -142,13 +147,11 @@ class ModelTests(unittest.TestCase):
         model_prop_node.attach_dataset_id(
             local_dataset = [train, test],
             node_name = 42,
-            batch_size=batch_size
         )
         model_prop_orchestrator.attach_dataset_id(
             local_dataset = [test],
             node_name = 'orchestrator',
             only_test = True,
-            batch_size=batch_size
         )
         # Training and test
         for epoch in range(10):
