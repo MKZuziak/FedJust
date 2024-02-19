@@ -9,7 +9,9 @@ class Aggregator():
         pass
     
     
-    def aggregate_weights(weights: dict[int: OrderedDict]) -> OrderedDict:
+    def aggregate_weights(
+        self,
+        weights: dict[int: OrderedDict]) -> OrderedDict:
         """Basic aggregate function (equal to FedAvg) that returns the aggregate version of the
         weights. Perform deepcopy on the passed parameters.
         
