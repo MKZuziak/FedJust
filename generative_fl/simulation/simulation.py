@@ -115,6 +115,7 @@ class Simulation():
     def train_epoch(self,
                     sampled_nodes: dict[int: FederatedNode],
                     iteration: int,
+                    local_epochs: int, 
                     mode: str = 'weights',
                     save_model: bool = False,
                     save_path: str = None) -> tuple[dict[int, int, float, float, list, list], dict[int, OrderedDict]]:
@@ -127,6 +128,9 @@ class Simulation():
             Dictionary containing sampled Federated Nodes
         iteration: int
             Current global iteration of the training process
+        local_epochs: int
+            Number of local epochs for which the local model should
+            be trained.
         mode: str (default to 'weights')
             Mode = 'weights': Node will return model's weights.
             Mode = 'gradients': Node will return model's gradients.
@@ -141,8 +145,8 @@ class Simulation():
         """
         training_results = {}
         weights = {}
-        with Pool(self.sample_size) as pool:
-            results = [pool.apply_async(train_nodes, (node, iteration, mode, save_model, save_path)) for node in sampled_nodes]
+        with Pool(len(sampled_nodes)) as pool:
+            results = [pool.apply_async(train_nodes, (node, iteration, local_epochs, mode, save_model, save_path)) for node in list(sampled_nodes.values())]
             for result in results:
                 node_id, model_weights, loss_list, accuracy_list = result.get()
                 weights[node_id] = model_weights
@@ -159,6 +163,7 @@ class Simulation():
     def training_protocol(self,
                           iterations: int,
                           sample_size: int,
+                          local_epochs: int,
                           aggrgator: Aggregator,
                           metrics_savepath: str,
                           nodes_models_savepath: str,
@@ -176,6 +181,9 @@ class Simulation():
             Number of (global) iterations // epochs to train the models for.
         sample_size: int
             Size of the sample
+        local_epochs: int
+            Number of local epochs for which the local model should
+            be trained.
         aggregator: Aggregator
             Instance of the Aggregator object that will be used to aggregate the result each round
         metrics_savepath: str
@@ -209,6 +217,7 @@ class Simulation():
             training_results, weights = self.train_epoch(
                 sampled_nodes=sampled_nodes,
                 iteration=iteration,
+                local_epochs=local_epochs,
                 mode='weights',
                 save_model=True,
                 save_path=nodes_models_savepath
@@ -220,14 +229,16 @@ class Simulation():
                 save_path=os.path.join(metrics_savepath, 'training_metrics.csv'))
             
             # Testing nodes on the local dataset before the model update (only sampled nodes).
-            automatic_node_evaluation(sampled_nodes,
-                                      save_path=os.path.join(metrics_savepath, "before_update_metrics.csv"))
+            automatic_node_evaluation(
+                iteration=iteration,
+                nodes=sampled_nodes,
+                save_path=os.path.join(metrics_savepath, "before_update_metrics.csv"))
             
             # Updating weights
             new_weights = aggrgator.aggregate_weights(weights)
             
             # Updating weights for each node in the network
-            for node in self.network.value():
+            for node in self.network.values():
                 node.update_weights(new_weights)
             # Updating the weights for the central model
             self.orchestrator_model.update_weights(new_weights)
@@ -237,12 +248,15 @@ class Simulation():
                                                         path=orchestrator_models_savepath)
             
             # Evaluating the new set of weights on local datasets.
-            automatic_node_evaluation(self.network,
-                                      save_path=os.path.join(metrics_savepath, "after_update_metrics.csv"))
+            automatic_node_evaluation(
+                iteration=iteration,
+                nodes=self.network,
+                save_path=os.path.join(metrics_savepath, "after_update_metrics.csv"))
             # Evaluating the new set of weights on orchestrator's dataset.
-            evaluate_model(self.orchestrator_model(
-                save_path=os.path.join(metrics_savepath, "orchestrator_metrics.csv")
-            ))
+            evaluate_model(
+                iteration=iteration,
+                model=self.orchestrator_model,
+                save_path=os.path.join(metrics_savepath, "orchestrator_metrics.csv"))
         # self.orchestrator_logger.critical("Training complete")
         # return 0
                         
