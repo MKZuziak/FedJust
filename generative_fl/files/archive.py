@@ -4,11 +4,21 @@ import time
 
 def create_archive(
     path: str,
-    archive_name: str = time.strftime("%d.%m.%Y %H:%M%S", time.gmtime())
+    archive_name: str = time.strftime("%d %m %Y %H %M %S", time.gmtime())
     ) -> tuple[str, str, str]:
     """Creates a basic directory structure for preserving simulation files.
     Returns Paths to metrics save location, nodes (models) save location and
-    orchestrator (models) save location.
+    orchestrator (models) save location. The directory complies with the following
+    structure:
+    ---root
+        ---archive_name
+            ---results
+            ---models
+                ---orchestrator models
+                ---nodes models
+    
+    Returns paths in order (metrics_savepath, nodes_models_savepath, 
+    orchestrator_model_savepath).
     
     Parameters
     ----------
