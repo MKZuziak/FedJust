@@ -5,7 +5,7 @@ from generative_fl.model.federated_model import FederatedModel
 from generative_fl.node.federated_node import FederatedNode
 
 
-def evaluate_node(
+def evaluate_model(
     iteration: int, 
     model: FederatedModel,
     save_path: str,
@@ -93,7 +93,7 @@ def automatic_node_evaluation(
     -------
         None"""
     for node in nodes.values():
-        evaluate_node(
+        evaluate_model(
             iteration=iteration,
             model=node.model,
             save_path=save_path,
