@@ -173,6 +173,11 @@ class SimulationTests(unittest.TestCase):
     #TODO
     
     
+    def test_train_protocol(self):
+        pass
+    #TODO
+    
+    
         
 
 if __name__ == '__main__':
