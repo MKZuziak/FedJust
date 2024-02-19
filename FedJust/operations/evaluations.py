@@ -1,8 +1,8 @@
 import csv
 import os
 
-from generative_fl.model.federated_model import FederatedModel
-from generative_fl.node.federated_node import FederatedNode
+from FedJust.model.federated_model import FederatedModel
+from FedJust.node.federated_node import FederatedNode
 
 
 def evaluate_model(

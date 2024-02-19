@@ -9,7 +9,7 @@ import datasets
 from torchvision import transforms
 from sklearn.metrics import confusion_matrix, f1_score, precision_score, recall_score
 
-from generative_fl.files.loggers import model_logger
+from FedJust.files.loggers import model_logger
 
 
 # Setting up the model logger

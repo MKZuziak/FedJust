@@ -1,6 +1,6 @@
 import unittest
 
-from generative_fl.operations.evaluations import evaluate_node, automatic_node_evaluation
+from FedJust.operations.evaluations import evaluate_node, automatic_node_evaluation
 
 class Evaluations_Tests(unittest.TestCase):
     

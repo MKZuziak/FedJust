@@ -1,6 +1,6 @@
 import unittest
 
-from generative_fl.aggregators.aggregator import Aggregator
+from FedJust.aggregators.aggregator import Aggregator
 
 
 class Test_Aggregator(unittest.TestCase):

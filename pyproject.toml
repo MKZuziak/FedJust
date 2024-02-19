@@ -1,10 +1,10 @@
 [tool.poetry]
-name = "generative-fl"
+name = "FedJust"
 version = "0.1.0"
 description = ""
 authors = ["Scolpe <63779111+Scolpe@users.noreply.github.com>"]
 readme = "README.md"
-packages = [{include = "generative_fl"}]
+packages = [{include = "FedJust"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"

@@ -8,7 +8,7 @@ import numpy as np
 
 from tests.test_props.nets import NeuralNetwork
 from tests.test_props.datasets import return_mnist
-from generative_fl.model.federated_model import FederatedModel
+from FedJust.model.federated_model import FederatedModel
 
 class ModelTests(unittest.TestCase):
     

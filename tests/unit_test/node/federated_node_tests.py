@@ -5,8 +5,8 @@ import os
 
 import torch
 
-from generative_fl.node.federated_node import FederatedNode
-from generative_fl.model.federated_model import FederatedModel
+from FedJust.node.federated_node import FederatedNode
+from FedJust.model.federated_model import FederatedModel
 from tests.test_props.datasets import return_mnist
 from tests.test_props.nets import NeuralNetwork
 
