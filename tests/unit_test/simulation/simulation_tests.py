@@ -166,6 +166,13 @@ class SimulationTests(unittest.TestCase):
                     self.assertNotEqual(simulation.network[number].model.net, simulation.network[number_2].model.net)
                     self.assertNotEqual(simulation.network[number].model.trainloader, simulation.network[number_2].model.trainloader)
                     self.assertNotEqual(simulation.network[number].model.testloader, simulation.network[number_2].model.testloader)
+    
+    
+    def test_train_epoch(self):
+        pass
+    #TODO
+    
+    
         
 
 if __name__ == '__main__':
