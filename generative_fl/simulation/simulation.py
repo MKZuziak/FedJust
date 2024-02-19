@@ -13,19 +13,14 @@ from generative_fl.operations.orchestrations import train_nodes, sample_nodes
 from generative_fl.aggregators.aggregator import Aggregator
 from generative_fl.operations.evaluations import evaluate_model, automatic_node_evaluation
 from generative_fl.files.handlers import save_nested_dict_ascsv
+from generative_fl.files.loggers import orchestrator_logger
 
-
-# import datasets 
-# import copy
-# import numpy as np
-# from multiprocessing import Pool
-# from torch import nn
-# from typing import Union
 
 # set_start_method set to 'spawn' to ensure compatibility across platforms.
 from multiprocessing import set_start_method
 set_start_method("spawn", force=True)
-
+# Setting up the orchestrator logger
+orchestrator_logger = orchestrator_logger()
 
 class Simulation():
     """Simulation class representing a generic simulation type.
@@ -199,7 +194,7 @@ class Simulation():
             Returns 0 on the successful completion of the training.
         """
         for iteration in range(iterations):
-            # self.orchestrator_logger.info(f"Iteration {iteration}")
+            orchestrator_logger.info(f"Iteration {iteration}")
             
             # # Updating weights for every node
             # for node in self.network.values():
@@ -211,7 +206,6 @@ class Simulation():
                 sample_size = sample_size,
                 generator = self.generator
             )
-            # self.orchestrator_logger.info(f"Iteration {iteration})
             
             # Training nodes
             training_results, weights = self.train_epoch(

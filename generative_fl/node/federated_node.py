@@ -3,9 +3,8 @@ from functools import partial
 from collections import OrderedDict
 import copy
 
-import torch
-
 from generative_fl.model.federated_model import FederatedModel
+from generative_fl.files.loggers import node_logger
 
 # import torch
 # from numpy import array
@@ -16,7 +15,8 @@ from generative_fl.model.federated_model import FederatedModel
 # from forcha.utils.helpers import find_nearest
 # from forcha.components.settings.settings import Settings
 
-# node_logger = Loggers.node_logger()
+# Setting up the node logger
+node_logger = node_logger()
 
 class FederatedNode:
     def __init__(self) -> None:
@@ -122,7 +122,7 @@ class FederatedNode:
         -------
             Tuple[int, OrderedDict, List[float], List[float]]:
         """
-        # node_logger.info(f"[ITERATION {iteration} | NODE {self.node_id}] Starting training on node {self.node_id}")
+        node_logger.info(f"[ITERATION {iteration} | NODE {self.node_id}] Starting training on node {self.node_id}")
         loss_list: list[float] = []
         accuracy_list: list[float] = []
         
@@ -142,7 +142,7 @@ class FederatedNode:
                 iteration=iteration, 
                 path=save_path
                 )
-        # node_logger.info(f"[ITERATION {iteration} | NODE {self.node_id}] Results of training on node {self.node_id}: {accuracy_list}")
+        node_logger.debug(f"[ITERATION {iteration} | NODE {self.node_id}] Results of training on node {self.node_id}: {accuracy_list}")
         if mode == 'weights':
             return (
                 self.node_id,

@@ -5,26 +5,16 @@ import os
 
 import numpy as np
 import torch
-import numpy
 import datasets
 from torchvision import transforms
 from sklearn.metrics import confusion_matrix, f1_score, precision_score, recall_score
 
-# from datasets import arrow_dataset
-# from collections import OrderedDict
-# # Modules imports
-# from collections import Counter
-# from typing import Any, Generic, Mapping, TypeVar, Union
-# #from sklearn.metrics import confusion_matrix, f1_score, precision_score, recall_score
-# from torch import nn, optim
-# from torchvision import transforms
-# from sklearn.metrics import f1_score, recall_score, confusion_matrix, precision_score
-# import os
-# from forcha.exceptions.modelexception import ModelException
-# from forcha.utils.loggers import Loggers
-# from forcha.components.settings.settings import Settings
+from generative_fl.files.loggers import model_logger
 
-# model_logger = Loggers.model_logger()
+
+# Setting up the model logger
+model_logger = model_logger()
+
 
 class FederatedModel:
     """This class is used to encapsulate the (PyTorch) federated model that
@@ -328,8 +318,7 @@ class FederatedModel:
 
         loss = train_loss / len(self.trainloader)
         accuracy = correct / total
-        # model_logger.info(f"[ITERATION {iteration} | EPOCH {epoch} | NODE {self.node_name}] Training on {self.node_name} results: loss: {loss}, accuracy: {accuracy}")
-        print(f"[ITERATION {iteration} | EPOCH {epoch} | NODE {self.node_name}] Training on {self.node_name} results: loss: {loss}, accuracy: {accuracy}")
+        model_logger.info(f"[ITERATION {iteration} | EPOCH {epoch} | NODE {self.node_name}] Training on {self.node_name} results: loss: {loss}, accuracy: {accuracy}")
         
         return (loss, 
                 accuracy)
