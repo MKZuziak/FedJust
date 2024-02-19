@@ -1,4 +1,5 @@
 from typing import List
+from collections import OrderedDict
 
 import numpy as np  
 
@@ -10,9 +11,10 @@ def train_nodes(
     local_epochs: int,
     mode: str = 'weights',
     save_model: bool = False,
-    save_path: str = None) -> tuple[int, List[float]]:
+    save_path: str = None) -> tuple[int, OrderedDict, List[float], List[float]]:
     """Used to command the node to start the local training.
     Invokes .train_local_model method and returns the results.
+    
     Parameters
     ----------
     node: FederatedNode 
@@ -31,7 +33,7 @@ def train_nodes(
         Save path for preserving a model (applicable only when save_model = True)
     Returns
     -------
-    tuple(node_id: str, weights)
+        tpule[int, OrderedDict, List[float], List[float]]
     """
     node_id, weights, loss_list, accuracy_list = node.train_local_model(
         iteration = iteration,
