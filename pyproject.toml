@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "FedJust"
-version = "0.1.0"
+version = "0.1.1"
 description = ""
 authors = ["Scolpe <63779111+Scolpe@users.noreply.github.com>"]
 readme = "README.md"

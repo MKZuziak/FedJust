@@ -126,8 +126,8 @@ class FederatedNode:
         loss_list: list[float] = []
         accuracy_list: list[float] = []
         
+        # If mode is set to "gradients" -> preserve a local model to calculate gradients
         if mode == 'gradients':
-            raise NotImplementedError()
             self.model.preserve_initial_model()
         
         for epoch in range(local_epochs):
@@ -143,6 +143,7 @@ class FederatedNode:
                 path=save_path
                 )
         node_logger.debug(f"[ITERATION {iteration} | NODE {self.node_id}] Results of training on node {self.node_id}: {accuracy_list}")
+        
         if mode == 'weights':
             return (
                 self.node_id,
@@ -151,13 +152,14 @@ class FederatedNode:
                 accuracy_list
                 )
         elif mode == 'gradients':
-            return NotImplementedError
             return (
                 self.node_id,
                 self.model.get_gradients(),
                 loss_list,
                 accuracy_list
                 )
+        else:
+            raise NameError()
     
     
     def local_training(self,

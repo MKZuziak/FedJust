@@ -2,6 +2,7 @@ import torch
 from functools import partial
 import copy
 import os
+from collections import OrderedDict
 
 import numpy as np
 import torch
@@ -178,31 +179,31 @@ class FederatedModel:
         return copy.deepcopy(self.net.state_dict())
     
     
-    # def get_gradients(self) -> None:
-    #     """Get the gradients of the network (differences between received and trained model)
+    def get_gradients(self) -> None:
+        """Get the gradients of the network (differences between received and trained model)
         
-    #     Parameters
-    #     ----------
+        Parameters
+        ----------
         
-    #     Raises
-    #     -------------
-    #         Exception: if the original model was not preserved.
+        Raises
+        -------------
+            Exception: if the original model was not preserved.
         
-    #     Returns
-    #     -------------
-    #         Oredered_Dict: Gradients of the network.
-    #     """
-    #     assert self.initial_model != None, "Computing gradients require saving initial model first!"
-    #     self.net.to(self.cpu) # Dupming weights on cpu.
-    #     self.initial_model.to(self.cpu)
-    #     weights_t1 = self.net.state_dict()
-    #     weights_t2 = self.initial_model.state_dict()
+        Returns
+        -------------
+            Oredered_Dict: Gradients of the network.
+        """
+        assert self.initial_model != None, "Computing gradients require saving initial model first!"
+        self.net.to(self.cpu) # Dupming weights on cpu.
+        self.initial_model.to(self.cpu)
+        weights_t1 = self.net.state_dict()
+        weights_t2 = self.initial_model.state_dict()
         
-    #     self.gradients = OrderedDict.fromkeys(weights_t1.keys(), 0)
-    #     for key in weights_t1:
-    #         self.gradients[key] =  weights_t1[key] - weights_t2[key]
+        self.gradients = OrderedDict.fromkeys(weights_t1.keys(), 0)
+        for key in weights_t1:
+            self.gradients[key] =  weights_t1[key] - weights_t2[key]
 
-    #     return self.gradients # Try: to provide original weights, no copies
+        return self.gradients # Try: to provide original weights, no copies
 
 
     def update_weights(
@@ -256,19 +257,19 @@ class FederatedModel:
         )
 
 
-    # def preserve_initial_model(self) -> None:
-    #     """Preserve the initial model provided at the
-    #     end of the turn (necessary for computing gradients,
-    #     when using aggregating methods such as FedOpt).
+    def preserve_initial_model(self) -> None:
+        """Preserve the initial model provided at the
+        end of the turn (necessary for computing gradients,
+        when using aggregating methods such as FedOpt).
         
-    #     Parameters
-    #     ----------
+        Parameters
+        ----------
         
-    #     Returns
-    #     -------
-    #         Tuple[float, float]: Loss and accuracy on the training set.
-    #     """
-    #     self.initial_model = copy.deepcopy(self.net)
+        Returns
+        -------
+            Tuple[float, float]: Loss and accuracy on the training set.
+        """
+        self.initial_model = copy.deepcopy(self.net)
 
 
     def train(
