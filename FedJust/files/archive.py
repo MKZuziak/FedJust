@@ -35,8 +35,8 @@ def create_archive(
     assert not os.path.exists(root), f"Directory {root} already exists" 
     
     metrics_savepath = os.path.join(root, 'results')
-    nodes_models_savepath = os.path.join(root, 'models', 'orchestrator')
-    orchestrator_model_savepath = os.path.join(root, 'models', 'nodes')
+    orchestrator_model_savepath = os.path.join(root, 'models', 'orchestrator')
+    nodes_models_savepath = os.path.join(root, 'models', 'nodes')
     os.makedirs(metrics_savepath)
     os.makedirs(nodes_models_savepath)
     os.makedirs(orchestrator_model_savepath)
