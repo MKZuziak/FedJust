@@ -44,5 +44,5 @@ class Fedopt_Optimizer(Aggregator):
         OrderedDict"""        
         updated_weights = OrderedDict((key, zeros(weights[key].size())) for key in weights.keys())
         for key in weights:
-            updated_weights[key] = weights[key] + (learning_rate * (-gradients[key]))
+            updated_weights[key] = weights[key] + (learning_rate * (gradients[key]))
         return updated_weights
