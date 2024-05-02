@@ -1,3 +1,11 @@
+*fed_avg_single_client
+*fed_avg_test
+*fed_opt_correct
+*fed_opt_correct_single_client
+*fed_opt_inversed_delta
+*fed_opt_inversed_single_client
+*test_analysis
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

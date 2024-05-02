@@ -196,12 +196,12 @@ class FederatedModel:
         assert self.initial_model != None, "Computing gradients require saving initial model first!"
         self.net.to(self.cpu) # Dupming weights on cpu.
         self.initial_model.to(self.cpu)
-        weights_t1 = self.net.state_dict()
-        weights_t2 = self.initial_model.state_dict()
+        weights_trained = self.net.state_dict()
+        weights_initial = self.initial_model.state_dict()
         
-        self.gradients = OrderedDict.fromkeys(weights_t1.keys(), 0)
-        for key in weights_t1:
-            self.gradients[key] =  weights_t1[key] - weights_t2[key]
+        self.gradients = OrderedDict.fromkeys(weights_trained.keys(), 0)
+        for key in weights_trained:
+            self.gradients[key] =  weights_trained[key] - weights_initial[key]
 
         return self.gradients # Try: to provide original weights, no copies
 
@@ -361,7 +361,7 @@ class FederatedModel:
                 y_pred.append(pred)
                 y_true.append(targets)
 
-        test_loss = np.mean(losses)
+        test_loss = np.mean(test_loss)
         accuracy = correct / total
 
         y_true = [item.item() for sublist in y_true for item in sublist]
