@@ -76,7 +76,8 @@ class FederatedModel:
         self,
         local_dataset: list[datasets.arrow_dataset.Dataset, datasets.arrow_dataset.Dataset] | list[datasets.arrow_dataset.Dataset],
         node_name: int | str,
-        only_test: bool = False
+        only_test: bool = False,
+        hugging_face_map: bool = True
         ) -> None:
         """Attaches huggingface dataset to the model by firstly converting it into a pytorch-appropiate standard.
         
@@ -90,15 +91,26 @@ class FederatedModel:
             If true, only a test set will be returned
         batch_size: int [default to 32]:
             Batch size used in test and train loader
-        
+        higging_face_map: bool [default to True]:
+            If set to True, will use hugging face map function,
+            that takes more time to process but results in a more
+            stable and reversable transformation of the results.
         Returns
         -------------
         None
         """
         self.node_name = node_name
         if only_test == False:
-            local_dataset[0] = local_dataset[0].with_transform(self.transform_func)
-            local_dataset[1] = local_dataset[1].with_transform(self.transform_func)
+            if hugging_face_map:
+                convert_tensor = transforms.ToTensor()
+                local_dataset[0] = local_dataset[0].map(lambda sample: {"image": convert_tensor(sample['image'])})
+                local_dataset[0].set_format("pt", columns=["image"], output_all_columns=True)
+                    
+                local_dataset[1] = local_dataset[1].map(lambda sample: {"image": convert_tensor(sample['image'])})
+                local_dataset[1].set_format("pt", columns=["image"], output_all_columns=True)
+            else:
+                local_dataset[0] = local_dataset[0].with_transform(self.transform_func)
+                local_dataset[1] = local_dataset[1].with_transform(self.transform_func)
             self.trainloader = torch.utils.data.DataLoader(
                 local_dataset[0],
                 batch_size=self.batch_size,
@@ -112,7 +124,12 @@ class FederatedModel:
                 num_workers=0,
             )
         else:
-            local_dataset[0] = local_dataset[0].with_transform(self.transform_func)
+            if hugging_face_map:
+                convert_tensor = transforms.ToTensor()
+                local_dataset[0] = local_dataset[0].map(lambda sample: {"image": convert_tensor(sample['image'])})
+                local_dataset[0].set_format("pt", columns=["image"], output_all_columns=True)
+            else:
+                local_dataset[0] = local_dataset[0].with_transform(self.transform_func)
             self.testloader = torch.utils.data.DataLoader(
                 local_dataset[0],
                 batch_size=self.batch_size,
