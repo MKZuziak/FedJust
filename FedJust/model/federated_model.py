@@ -355,6 +355,7 @@ class FederatedModel:
         # Try: to place net on device directly during the evaluation stage.
         self.net.to(self.device)
         self.net.eval()
+        evaluation_results = {}
         criterion = torch.nn.CrossEntropyLoss()
         test_loss = 0
         correct = 0
@@ -378,57 +379,52 @@ class FederatedModel:
                 y_pred.append(pred)
                 y_true.append(targets)
 
-        test_loss = np.mean(test_loss)
-        accuracy = correct / total
+        evaluation_results['test_loss'] = np.mean(losses)
+        evaluation_results['accuracy'] = correct / total
 
         y_true = [item.item() for sublist in y_true for item in sublist]
         y_pred = [item.item() for sublist in y_pred for item in sublist]
 
-        f1score = f1_score(y_true, y_pred, average="macro")
-        precision = precision_score(y_true, y_pred, average="macro")
-        recall = recall_score(y_true, y_pred, average="macro")
+        evaluation_results['f1score'] = f1_score(y_true, y_pred, average="macro")
+        evaluation_results['precision'] = precision_score(y_true, y_pred, average="macro")
+        evaluation_results['recall'] = recall_score(y_true, y_pred, average="macro")
 
         cm = confusion_matrix(y_true, y_pred)
         cm = cm.astype("float") / cm.sum(axis=1)[:, np.newaxis]
         accuracy_per_class = cm.diagonal()
+        accuracy_per_class_expanded = {
+            f'accuracy_per_{class_id}': value for class_id, value in enumerate(accuracy_per_class)
+        }
+        evaluation_results.update(accuracy_per_class_expanded)
 
-        true_positives = np.diag(cm)
-        num_classes = len(list(set(y_true)))
+        # true_positives = np.diag(cm)
+        # num_classes = len(list(set(y_true)))
 
-        false_positives = []
-        for i in range(num_classes):
-            false_positives.append(sum(cm[:,i]) - cm[i,i])
+        # false_positives = []
+        # for i in range(num_classes):
+        #     false_positives.append(sum(cm[:,i]) - cm[i,i])
 
-        false_negatives = []
-        for i in range(num_classes):
-            false_negatives.append(sum(cm[i,:]) - cm[i,i])
+        # false_negatives = []
+        # for i in range(num_classes):
+        #     false_negatives.append(sum(cm[i,:]) - cm[i,i])
 
-        true_negatives = []
-        for i in range(num_classes):
-            temp = np.delete(cm, i, 0)   # delete ith row
-            temp = np.delete(temp, i, 1)  # delete ith column
-            true_negatives.append(sum(sum(temp)))
+        # true_negatives = []
+        # for i in range(num_classes):
+        #     temp = np.delete(cm, i, 0)   # delete ith row
+        #     temp = np.delete(temp, i, 1)  # delete ith column
+        #     true_negatives.append(sum(sum(temp)))
 
-        denominator = [sum(x) for x in zip(false_positives, true_negatives)]
-        false_positive_rate = [num/den for num, den in zip(false_positives, denominator)]
+        # denominator = [sum(x) for x in zip(false_positives, true_negatives)]
+        # false_positive_rate = [num/den for num, den in zip(false_positives, denominator)]
 
-        denominator = [sum(x) for x in zip(true_positives, false_negatives)]
-        true_positive_rate = [num/den for num, den in zip(true_positives, denominator)]
+        # denominator = [sum(x) for x in zip(true_positives, false_negatives)]
+        # true_positive_rate = [num/den for num, den in zip(true_positives, denominator)]
 
-        # # Emptying the cuda_cache
-        # if torch.cuda.is_available():
-        #     torch.cuda.empty_cache()
+        # # # Emptying the cuda_cache
+        # # if torch.cuda.is_available():
+        # #     torch.cuda.empty_cache()
 
-        return (
-                test_loss,
-                accuracy,
-                f1score,
-                precision,
-                recall,
-                accuracy_per_class,
-                true_positive_rate,
-                false_positive_rate
-                )
+        return evaluation_results
 
 
     # def quick_evaluate(self) -> tuple[float, float]:

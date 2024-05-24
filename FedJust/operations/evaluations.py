@@ -31,27 +31,8 @@ def evaluate_model(
     -------
         None"""
     try:
-        (
-            loss,
-            accuracy,
-            fscore,
-            precision,
-            recall,
-            test_accuracy_per_class,
-            true_positive_rate,
-            false_positive_rate
-        ) = model.evaluate_model()
-        metrics = {"epoch": iteration,
-                    "node": model.node_name,
-                    "loss":loss, 
-                    "accuracy": accuracy, 
-                    "fscore": fscore, 
-                    "precision": precision,
-                    "recall": recall, 
-                    "test_accuracy_per_class": test_accuracy_per_class, 
-                    "true_positive_rate": true_positive_rate,
-                    "false_positive_rate": false_positive_rate,
-                    "epoch": iteration}
+        evaluation_results = model.evaluate_model()
+        evaluation_results['node_id'] = model.node_name
         if log_to_screen == True:
             pass
             #logger.info(f"Evaluating model after iteration {iteration} on node {model.node_name}. Results: {metrics}")
@@ -59,11 +40,11 @@ def evaluate_model(
         logger.warning(f"Unable to compute metrics. {e}")
     path = os.path.join(save_path)
     with open(path, 'a+', newline='') as saved_file:
-            writer = csv.DictWriter(saved_file, list(metrics.keys()))
+            writer = csv.DictWriter(saved_file, list(evaluation_results.keys()))
             # If the file does not exist, it will create it and write the header.
             if os.path.getsize(path) == 0:
                 writer.writeheader()
-            writer.writerow(metrics)
+            writer.writerow(evaluation_results)
 
 
 def automatic_node_evaluation(
