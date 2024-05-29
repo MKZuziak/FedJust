@@ -33,6 +33,7 @@ def evaluate_model(
     try:
         evaluation_results = model.evaluate_model()
         evaluation_results['node_id'] = model.node_name
+        evaluation_results['epoch'] = iteration
         if log_to_screen == True:
             pass
             #logger.info(f"Evaluating model after iteration {iteration} on node {model.node_name}. Results: {metrics}")
