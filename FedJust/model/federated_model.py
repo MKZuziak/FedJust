@@ -389,7 +389,7 @@ class FederatedModel:
         evaluation_results['precision'] = precision_score(y_true, y_pred, average="macro")
         evaluation_results['recall'] = recall_score(y_true, y_pred, average="macro")
 
-        cm = confusion_matrix(y_true, y_pred)
+        cm = confusion_matrix(y_true, y_pred, labels=[i for i in range(10)])
         cm = cm.astype("float") / cm.sum(axis=1)[:, np.newaxis]
         accuracy_per_class = cm.diagonal()
         accuracy_per_class_expanded = {
