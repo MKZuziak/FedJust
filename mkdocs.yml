@@ -1,0 +1,18 @@
+# mkdocs.yml
+site_name: FedJust
+
+theme:
+  name: "material"
+
+plugins:
+- mkdocstrings:
+    handlers:
+      python:
+        paths: [.\FedJust]  # actually not needed, default
+
+nav: 
+  - FedJust Documentation: index.md
+  - tutorials.md
+  - how-to-guides.md
+  - reference.md
+  - explanation.md
