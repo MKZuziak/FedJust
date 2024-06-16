@@ -15,4 +15,4 @@ The virtual environment will be installed together with the required dependencie
 The current version of the repository contains only a limited version of FedJust and a preliminary draft of the documentation. More is coming soon!
 
 # FedJust - Full Documentation
-The full documentation can be found at [FedJust](https://mkzuziak.github.io/FedJust/). The documentation will be updated in incremental changes.
+The full documentation can be found at [FedJust](https://mkzuziak.github.io/FedJust/). The documentation will be updated with incremental changes.
