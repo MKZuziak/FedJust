@@ -16,11 +16,11 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.26">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.27">
     
     
       
-        <title>Tutorials - FedJust</title>
+        <title>1. Quick set-up guide - FedJust</title>
       
     
     
@@ -63,6 +63,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#1-quick-set-up-guide" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -95,7 +100,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Tutorials
+              1. Quick set-up guide
             
           </span>
         </div>
@@ -177,16 +182,102 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    1. Quick set-up guide
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
-    Tutorials
+    1. Quick set-up guide
   </span>
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#defining-the-imports" class="md-nav__link">
+    <span class="md-ellipsis">
+      Defining the Imports
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create-archives" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create Archives
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#instantiate-the-model-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instantiate the Model Template
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#initialize-the-node-template-and-define-an-aggregation-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Initialize the Node Template and Define an Aggregation Strategy
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create-a-simulation-instance-attach-models-and-datasets" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create a Simulation Instance, Attach Models and Datasets
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#launch-the-simulation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Launch the Simulation
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -203,7 +294,7 @@
         
   
   <span class="md-ellipsis">
-    How to guides
+    FedJust - Adjustable Components
   </span>
   
 
@@ -269,6 +360,70 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#defining-the-imports" class="md-nav__link">
+    <span class="md-ellipsis">
+      Defining the Imports
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create-archives" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create Archives
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#instantiate-the-model-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instantiate the Model Template
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#initialize-the-node-template-and-define-an-aggregation-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Initialize the Node Template and Define an Aggregation Strategy
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create-a-simulation-instance-attach-models-and-datasets" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create a Simulation Instance, Attach Models and Datasets
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#launch-the-simulation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Launch the Simulation
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -283,10 +438,123 @@
                   
 
 
-  <h1>Tutorials</h1>
+<h1 id="1-quick-set-up-guide">1. Quick set-up guide</h1>
+<p>FedJust was made to be easy to set up and customize. This brief walkthrough will show you how to launch a basic simulation using the library.</p>
+<pre><code>import os
+from functools import partial
 
-<p>*** ( industrial noises in the background ) ***</p>
-<p>SITE IN CONSTRUCTION</p>
+from torch import optim
+
+from (...) import DATASET
+from (...) import NEURAL_NETWORK
+from FedJust.model.federated_model import FederatedModel
+from FedJust.node.federated_node import FederatedNode
+from FedJust.simulation.adaptive_optimizer_simulation import Adaptive_Optimizer_Simulation
+from FedJust.aggregators.fedopt_aggregator import Fedopt_Optimizer
+from FedJust.files.archive import create_archive
+
+def exemplary_simulation():
+    (metrics_savepath, 
+     nodes_models_savepath, 
+     orchestrator_model_savepath) = create_archive(os.getcwd())
+
+    train, test = DATASET
+    net_architecture = NEURAL_NETWORK()
+    optimizer_architecture = partial(optim.SGD, lr=0.001)
+    model_tempate = FederatedModel(
+        net=net_architecture,
+        optimizer_template=optimizer_architecture,
+        loader_batch_size=32
+    )
+    node_template = FederatedNode()
+    fed_avg_aggregator = Fedopt_Optimizer()
+
+    simulation_instace = Adaptive_Optimizer_Simulation(model_template=model_tempate,
+                                    node_template=node_template)
+    simulation_instace.attach_orchestrator_model(orchestrator_data=test)
+    simulation_instace.attach_node_model({
+        3: [train, test],
+        7: [train, test],
+        11: [train, test],
+        12: [train, test]
+    })
+    simulation_instace.training_protocol(
+        iterations=5,
+        sample_size=2,
+        local_epochs=2,
+        aggrgator=fed_avg_aggregator,
+        learning_rate=1.0,
+        metrics_savepath=metrics_savepath,
+        nodes_models_savepath=nodes_models_savepath,
+        orchestrator_models_savepath=orchestrator_model_savepath
+    )
+</code></pre>
+<h4 id="defining-the-imports">Defining the Imports</h4>
+<p>At the beginning of the script, we import several modules. Except for FedJust modules, we also import Optim, DATASET and NEURAL_NETWORK architecture. <a href="https://pytorch.org/docs/stable/optim.html">Optim</a> is a PyTorch's package implementing various optimization algorithms that we will use with Python's <a href="https://docs.python.org/3/library/functools.html">functools.partial</a> to create a <a href="https://docs.python.org/3/library/functools.html#partial-objects">partial object</a> containg an Optimizer. DATASET is your custom dataset used for Federated Learning and NEURAL_NETWORK is your custom model defined as a child of a <a href="https://pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module">torch.nn.Module</a> - a standard convention for all architectures defined in PyTorch.</p>
+<pre><code>import os
+from functools import partial
+
+from torch import optim
+
+from (...) import DATASET
+from (...) import NEURAL_NETWORK
+from FedJust.model.federated_model import FederatedModel
+from FedJust.node.federated_node import FederatedNode
+from FedJust.simulation.adaptive_optimizer_simulation import Adaptive_Optimizer_Simulation
+from FedJust.aggregators.fedopt_aggregator import Fedopt_Optimizer
+from FedJust.files.archive import create_archive
+</code></pre>
+<h4 id="create-archives">Create Archives</h4>
+<p>Since the FedJust was made to simulate a federated environment, it comes with a number of convenient classes and functions to make your life easier. <code>create_archive(path: str,    archive_name: str = time.strftime("%d %m %Y %H %M %S", time.gmtime())) -&gt; tuple[str, str, str]</code> is one of such classes. It creates a directory with appropriate directories and returns an absolute path to a subdirectory for preserving metrics, nodes' models and orchestrator's model. Although calling a <code>create_archive()</code> is not strictly necessary, users may find it convenient that there is a simple function for creating an appropriate file structure and obtaining absolute paths to it.</p>
+<pre><code>    (metrics_savepath, 
+     nodes_models_savepath, 
+     orchestrator_model_savepath) = create_archive(os.getcwd())
+</code></pre>
+<h4 id="instantiate-the-model-template">Instantiate the Model Template</h4>
+<p><code>Federated Model</code> is a baseline building block of all simulations within the FedJust. It is an abstract container for a model - understood as a combination of an already initiated Neural Network, Data Shufflers and Utility Methods.</p>
+<pre><code>    net_architecture = NEURAL_NETWORK()
+    optimizer_architecture = partial(optim.SGD, lr=0.001)
+    model_tempate = FederatedModel(
+        net=net_architecture,
+        optimizer_template=optimizer_architecture,
+        loader_batch_size=32
+    )
+</code></pre>
+<p>The template requires a torch.nn.Module, optimizer template and an indication of a loader batch size (to initialize PyTorch's <a href="https://pytorch.org/docs/stable/data.html">Data Loaders</a>).</p>
+<h4 id="initialize-the-node-template-and-define-an-aggregation-strategy">Initialize the Node Template and Define an Aggregation Strategy</h4>
+<p><code>Federated Node</code> is another abstract container that serves as a boilerplate for writing your custom Federated Node. It is a combination of a particular <code>Federed Model</code> and a unique identifier.</p>
+<p><code>Fedopt_Optimizer</code> defines a concrete strategy of mixing the weights by the central entity.</p>
+<pre><code>    node_template = FederatedNode()
+    fed_avg_aggregator = Fedopt_Optimizer()
+</code></pre>
+<h4 id="create-a-simulation-instance-attach-models-and-datasets">Create a Simulation Instance, Attach Models and Datasets</h4>
+<p>The next step will consist of creating a simulation instance. It is an abstract object containing all the information about the nodes, states and the environment. We initialize it by passing a template of the <code>Federated Model</code> and <code>Federated Node</code> - those will be cloned separately for each individual client. Subsequently, we attach a dataset to each individual client by passing a unique identifier and a corresponding dataset (train and test set) for all the nodes we want to initialize in our network.</p>
+<pre><code>simulation_instace = Adaptive_Optimizer_Simulation(model_template=model_tempate,node_template=node_template)
+</code></pre>
+<p>Remark: The datasets should be either in <a href="https://huggingface.co/docs/datasets/about_arrow">HuggingFace format</a> or in standard <a href="https://pytorch.org/tutorials/beginner/basics/data_tutorial.html">PyTorch Format</a>, so they can be cloned appropriately and loaded using PyTorch's <a href="https://pytorch.org/docs/stable/data.html">Data Loaders</a>. The end user can change this behaviour by modifying the Federated Model base code (more on this in <a href="../how-to-guides/">how-to-guides</a>).</p>
+<pre><code>    simulation_instace = Adaptive_Optimizer_Simulation( model_template=model_tempate, node_template=node_template)
+    simulation_instace.attach_orchestrator_model(orchestrator_data=test)
+    simulation_instace.attach_node_model({
+        3: [train, test],
+        7: [train, test],
+        11: [train, test],
+        12: [train, test]
+    })
+</code></pre>
+<h4 id="launch-the-simulation">Launch the Simulation</h4>
+<p>Finally, we are ready to launch the simulation using our predefined components. To this, execute the <code>simulation.training_protocol</code> method.</p>
+<pre><code>    simulation_instace.training_protocol(
+        iterations=5,
+        sample_size=2,
+        local_epochs=2,
+        aggrgator=fed_avg_aggregator,
+        learning_rate=1.0,
+        metrics_savepath=metrics_savepath,
+        nodes_models_savepath=nodes_models_savepath,
+        orchestrator_models_savepath=orchestrator_model_savepath
+    )
+</code></pre>
+<p>Except for mandatory arguments such as iterations, sample size or the number of local epochs, the method accepts global paths to a place where the metrics, nodes and orchestrator models should be saved. We obtained those paths by calling a <code>create_archive</code> function before, but we could also omit this step, passing other global paths to respective directories.</p>
 
 
 
