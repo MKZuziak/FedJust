@@ -1,5 +1,4 @@
-
-# 1. Quick set-up guide
+# Quick Set-Up Guide
 
 FedJust was made to be easy to set up and customize. This brief walkthrough will show you how to launch a basic simulation using the library.
 
@@ -33,8 +32,10 @@ def exemplary_simulation():
     node_template = FederatedNode()
     fed_avg_aggregator = Fedopt_Optimizer()
   
-    simulation_instace = Adaptive_Optimizer_Simulation(model_template=model_tempate,
-                                    node_template=node_template)
+    simulation_instace = Simulation(
+        model_template=model_tempate,
+        node_template=node_template
+        )
     simulation_instace.attach_orchestrator_model(orchestrator_data=test)
     simulation_instace.attach_node_model({
         3: [train, test],
@@ -42,21 +43,24 @@ def exemplary_simulation():
         11: [train, test],
         12: [train, test]
     })
-    simulation_instace.training_protocol(
-        iterations=5,
-        sample_size=2,
-        local_epochs=2,
-        aggrgator=fed_avg_aggregator,
+    simulation_instace.training_protocol_baseline(
+	iterations=80,
+        sample_size=number_of_clients,
+        local_epochs=3,
+        aggrgator=fedopt_aggregator,
         learning_rate=1.0,
         metrics_savepath=metrics_savepath,
         nodes_models_savepath=nodes_models_savepath,
-        orchestrator_models_savepath=orchestrator_model_savepath
-    )
+        orchestrator_models_savepath=orchestrator_model_savepath,
+        sim_matrices_savepath=sim_matrices_savepath,
+        cluster_structure_savepath=cluster_structure_savepath,
+        batch_job=True
+	)
 ```
 
 #### Defining the Imports
 
-At the beginning of the script, we import several modules. Except for FedJust modules, we also import Optim, DATASET and NEURAL_NETWORK architecture. [Optim](https://pytorch.org/docs/stable/optim.html) is a PyTorch's package implementing various optimization algorithms that we will use with Python's [functools.partial](https://docs.python.org/3/library/functools.html) to create a [partial object](https://docs.python.org/3/library/functools.html#partial-objects) containg an Optimizer. DATASET is your custom dataset used for Federated Learning and NEURAL_NETWORK is your custom model defined as a child of a [torch.nn.Module](https://pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module) - a standard convention for all architectures defined in PyTorch.
+At the beginning of the script, we import several modules. Except for FedJust commin modules, we also import Optim, DATASET and NEURAL_NETWORK architecture. [Optim](https://pytorch.org/docs/stable/optim.html) is a PyTorch's package implementing various optimization algorithms that we will use with Python's [functools.partial](https://docs.python.org/3/library/functools.html) to create a [partial object](https://docs.python.org/3/library/functools.html#partial-objects) containg an Optimizer. DATASET is your custom dataset used for Federated Learning and NEURAL_NETWORK is your custom model defined as a child of a [torch.nn.Module](https://pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module) - a standard convention for all architectures defined in PyTorch.
 
 ```
 import os
@@ -75,7 +79,7 @@ from FedJust.files.archive import create_archive
 
 #### Create Archives
 
-Since the FedJust was made to simulate a federated environment, it comes with a number of convenient classes and functions to make your life easier. `create_archive(path: str,    archive_name: str = time.strftime("%d %m %Y %H %M %S", time.gmtime())) -> tuple[str, str, str]` is one of such classes. It creates a directory with appropriate directories and returns an absolute path to a subdirectory for preserving metrics, nodes' models and orchestrator's model. Although calling a `create_archive()` is not strictly necessary, users may find it convenient that there is a simple function for creating an appropriate file structure and obtaining absolute paths to it.
+Since the FedJust package was made to simulate a federated environment, it comes with a number of convenient classes and functions to make your life easier. `create_archive(path: str,    archive_name: str = time.strftime("%d %m %Y %H %M %S", time.gmtime())) -> tuple[str, str, str]` is one of such classes. It creates a directory with appropriate directories and returns an absolute path to a subdirectory for preserving metrics, nodes' models and orchestrator's model. Although calling a `create_archive()` is not strictly necessary, users may find it convenient that there is a simple function for creating an appropriate file structure and obtaining absolute paths to it.
 
 ```
     (metrics_savepath, 
@@ -85,7 +89,7 @@ Since the FedJust was made to simulate a federated environment, it comes with a 
 
 #### Instantiate the Model Template
 
-`Federated Model` is a baseline building block of all simulations within the FedJust. It is an abstract container for a model - understood as a combination of an already initiated Neural Network, Data Shufflers and Utility Methods.
+`Federated Model` is a baseline building block of all simulations within the FedJust package. It is an abstract container for a model - understood as a combination of an already initiated Neural Network, Data Shufflers and Utility Methods.
 
 ```
     net_architecture = NEURAL_NETWORK()

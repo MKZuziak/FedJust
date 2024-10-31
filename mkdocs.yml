@@ -13,6 +13,6 @@ plugins:
 nav: 
   - FedJust Documentation: index.md
   - tutorials.md
+  - examples.md
   - how-to-guides.md
   - reference.md
-  - explanation.md
