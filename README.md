@@ -22,15 +22,27 @@ The virtual environment will be installed together with the required dependencie
 
 FedJust was designed to be fully customizable on three different layers:
 
--Local Client Design
--Environment Design
--Federated Learning Design
+- Local Client Design
+- Environment Design
+- Federated Learning Simulation
 
-This is directly reflected in the architectural philosophy of the library. FedJust was built on top of PyTorch's and HuggingFace's capabilities. 
-The basic building block upon which the whole structure of the library is built is the Client Template Design. This abstract class encapsulates the template of the local client and will be cloned the desired number of times to decentralize multiple (individual) agents that are present in the environment.
+This is directly reflected in the architectural philosophy of the library. FedJust was built on top of PyTorch's and HuggingFace's capabilities.
 
-![alt text](docs/Model-Node-Blueprint.drawio.png)
+## Local Client Design
+
+The basic building block upon which the whole structure of the library is built is the **Client Template Design**. This abstract class encapsulates the template of the local client and will be cloned the desired number of times to decentralize multiple (individual) agents that are present in the environment. It consists of an object constructed from the ***Federated Model class***, which consists of [torch.nn architecture](https://pytorch.org/docs/stable/nn.html) and a [torch.optim object](https://pytorch.org/docs/stable/optim.html#module-torch.optim) passed in a Python's [functools.partial](https://docs.python.org/3/library/functools.html) higher-order function. This ***Federated Model* **object will be used to instantiate the ***Federated Node*** object. ***Federated Node*** objects, together with ***Federated Model Objects***, serve as a template that will be cloned a number of times and will represent the local nodes. This is represented in the diagram below.
+![Local Client Design](docs/materials/Model-Node-Blueprint.drawio.png)
+
+## Environment Design
+
+The simulation environment consists of a **Simulation Instance** - that is, an abstract object that encapsulates all the simulated environmental variables and conditions, including attached copies of the particular nodes with their corresponding local datasets. This is represented in the diagram below.
+![Envrionment Design](docs/materials/SIMULATION%20BLUEPRINT.drawio.png)
+
+## Federated Learning Simulation
+
+The (actual) Federated Learning Simulation is controlled through the previously defined *Simulation Instance* object. *Simulation Instance* accepts the Template of a *Federated Node* defined as above, clones it desired a number of times and attached the corresponding datasets to it. While the *Federated Node* template is abstract and generic, it becomes individualised when the corresponding dataset is attached to it. From this moment onwards, it can be retrieved as an individualised node using the *Simulation Instance* API. This is represented in the diagram below.
+![FL Simulation](docs/materials/HIGH_LEVEL_OVERVIEW.drawio.png)
 
 # FedJust - Full Documentation
 
-The full documentation can be found at [FedJust](https://mkzuziak.github.io/FedJust/). The documentation will be updated with incremental changes.
+The full documentation can be found at [FedJust](https://mkzuziak.github.io/FedJust/).
